@@ -1,19 +1,53 @@
 <?php
-if(isset($_POST['limit'])) {
-    // On récuperer le chiffre limite afficher dans la suite
-    $limit = $_POST['limit'] < 100 ? (int) $_POST['limit'] : 100 ;
-    // On crée la variable last chiffre qui est le dernier chiffre enregister dans le table fibonacci
-    $lastNumber = 1;
-    $fibonacci[] = 0;
-    // tant que latsNumber est plus petit que limit, on complete la liste de fibonacci
-    while($limit > $lastNumber){
-        // récuperation du dernier nombre inscrit dans la suite,
-        $number = end($fibonacci);
 
-        $fibonacci[] = $lastNumber;
-        // On ajoute la
-        $lastNumber += $number;
+/**
+ * Fonction renvoiant le tableau des facteurs d'un nombre
+ * @param int $number
+ * @return array
+ */
+function getFactors(int $number):array {
+    for ($i = 2; $i < $number; $i++) {
+        // Si le modulo de $number divisé par $i est 0, il s'agit d'un facteurs de ce nombre
+        if($number %  $i == 0){
+            $factors[] = $i;
+        }
     }
+    var_dump($factors);
+    return $factors;
+}
+
+/**
+ * Fonction renvoiant le tableau des nombres premiers contenus dans le tableau de base
+ * @param array $numbers
+ * @return array
+ */
+function getPrime(array $numbers) : array {
+
+    foreach ($numbers as $number) {
+        // Prime est de base vrai
+        $prime = true;
+        for($i=2; $i < $number; $i++){
+            // Si à un moment $number peut etre divisé par $i, alors ce n'est pas un nombre premier
+            if($number % $i == 0){
+                // On passe $prime à false et on arrete la boucle for
+                $prime = false;
+                break;
+            }
+        }
+
+        if($prime){
+            $primes[] = $number;
+        }
+
+    }
+    return $primes;
+}
+if(isset($_POST['number'])) {
+    // On récuperer le chiffre limite afficher dans la suite
+    $number = $_POST['number'] < 1000 ? (int) $_POST['number'] : 1000 ;
+    // On recupere les facteurs de numbers puis les nombres premiers
+    $factors = getFactors($number);
+    $primes = getPrime($factors);
 }
 
 ?>
@@ -23,18 +57,20 @@ if(isset($_POST['limit'])) {
 </head>
 <body>
 <?php
-if($limit) { ?>
+if($number) { ?>
+    <h2>Liste des facteurs premiers:</h2>
     <ul> <?php
-        foreach ($fibonacci as $number) {
-            echo "<li>" . $number . "</li>";
+        foreach ($primes as $prime) {
+            echo "<li>" . $prime . "</li>";
         } ?>
     </ul>
     <?php
 }
 ?>
 <form method="post">
-    <label for="limit">Nombre limite de la suite de fibonacci</label>
-    <input type="number" name="limit" id="limit" min="1" max="100">
+    <h1>Trouver les facteurs premiers d'un nombre</h1>
+    <label for="number">Nombre à utilisé</label>
+    <input type="number" name="number" id="number" min="1">
     <button type="submit" >Valider</button>
 </form>
 </body>
